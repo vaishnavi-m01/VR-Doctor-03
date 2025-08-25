@@ -28,7 +28,7 @@ export default function TabPills({
               className={`px-4 py-2 rounded-full border ${
                 isActive
                   ? 'bg-brand-dark-green border-brand-dark-green'
-                  : 'bg-brand-light-green border-brand-border-green'
+                  : 'bg-brand-light-green border-transparent'
               }`}
               accessible={true}
               accessibilityLabel={`${t.label} tab`}

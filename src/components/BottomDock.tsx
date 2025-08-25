@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../Navigation/types';
 import { Feather } from '@expo/vector-icons';
-import { HomeIcon, UserGroupIcon, ChartPieIcon } from 'react-native-heroicons/outline';
 
 type BottomDockProps = {
   activeScreen: keyof RootStackParamList;
@@ -17,27 +16,28 @@ export default function BottomDock({ activeScreen }: BottomDockProps) {
     label: string;
     active: boolean;
     screenName: keyof RootStackParamList;
-    IconComponent: React.ComponentType<{ color: string; size: number }>;
+    iconName: string; // Feather icon name
   };
 
-  const Item = ({ label, active, screenName, IconComponent }: DockItemProps) => (
-    <Pressable
-      className={`flex-1 items-center gap-1 px-3 py-2 relative ${active ? 'opacity-100' : 'opacity-80'}`}
-      onPress={() => navigation.navigate(screenName)}
-      accessible={true}
-      accessibilityLabel={`${label} tab`}
-      accessibilityRole="tab"
-      accessibilityState={{ selected: active }}
-    >
-      <IconComponent size={24} color={active ? 'white' : '#FFFFFFB3'} />
-      <Text className={`text-xs font-zen-medium ${active ? 'text-white' : 'text-white/80'}`}>
-        {label}
-      </Text>
-      {active && (
-        <View className="absolute bottom-0 w-16 h-1 bg-[#0ea06c] rounded-full" />
-      )}
-    </Pressable>
-  );
+  const Item = ({ label, active, screenName, iconName }: DockItemProps) => {
+    return (
+      <Pressable
+        className="flex-1 items-center px-3 py-2 relative"
+        onPress={() => navigation.navigate(screenName)}
+      >
+        <Feather
+          name={iconName as any}
+          size={24}
+          color={active ? 'white' : '#FFFFFFB3'}
+          solid 
+        />
+        <Text className={`text-xs font-zen-medium ${active ? 'text-white' : 'text-white/80'}`}>
+          {label}
+        </Text>
+        {active && <View className="absolute bottom-0 w-16 h-1 bg-[#0ea06c] rounded-full" />}
+      </Pressable>
+    );
+  };
 
   return (
     <View className="absolute bottom-4 w-full px-4">
@@ -46,19 +46,19 @@ export default function BottomDock({ activeScreen }: BottomDockProps) {
           label="HOME"
           screenName="Home"
           active={activeScreen === 'Home'}
-          IconComponent={HomeIcon}
+          iconName="home"
         />
         <Item
           label="PARTICIPANTS"
           screenName="Participants"
           active={activeScreen === 'Participants'}
-          IconComponent={UserGroupIcon}
+          iconName="user"
         />
         <Item
           label="REPORTS"
           screenName="Reports"
           active={activeScreen === 'Reports'}
-          IconComponent={ChartPieIcon}
+          iconName="file-text"
         />
 
         {/* Profile Button */}
@@ -73,11 +73,10 @@ export default function BottomDock({ activeScreen }: BottomDockProps) {
           <Text className="text-2xl">👤</Text>
         </Pressable>
 
-        {/* Floating Button */}
+        {/* Floating Add Button */}
         <Pressable
           className="absolute -right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-brand-accent-green items-center justify-center shadow-xl"
           onPress={() => {
-            // Navigate to SocioDemographic form
             navigation.navigate('SocioDemographic', { patientId: 1 });
           }}
           accessible={true}
@@ -91,4 +90,3 @@ export default function BottomDock({ activeScreen }: BottomDockProps) {
     </View>
   );
 }
- 
